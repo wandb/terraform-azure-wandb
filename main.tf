@@ -236,7 +236,7 @@ module "cert_manager" {
 
   ingress_class              = "azure/application-gateway"
   cert_manager_email         = "sysadmin@wandb.com"
-  cert_manager_chart_version = "v1.9.1"
+  cert_manager_chart_version = "v1.16.1"
   tags                       = var.tags
 
   depends_on = [module.app_aks]
