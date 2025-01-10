@@ -3,9 +3,9 @@ locals {
   url_prefix = var.ssl ? "https" : "http"
   url        = "${local.url_prefix}://${local.fqdn}"
 
-  redis_capacity            = coalesce(var.redis_capacity, local.deployment_size[var.size].cache)
-  database_sku_name         = coalesce(var.database_sku_name, local.deployment_size[var.size].db)
-  kubernetes_instance_type  = coalesce(var.kubernetes_instance_type, local.deployment_size[var.size].node_instance)
+  redis_capacity             = coalesce(var.redis_capacity, local.deployment_size[var.size].cache)
+  database_sku_name          = coalesce(var.database_sku_name, local.deployment_size[var.size].db)
+  kubernetes_instance_type   = coalesce(var.kubernetes_instance_type, local.deployment_size[var.size].node_instance)
   kubernetes_min_node_per_az = coalesce(var.kubernetes_min_node_per_az, local.deployment_size[var.size].min_node_count)
   kubernetes_max_node_per_az = coalesce(var.kubernetes_max_node_per_az, local.deployment_size[var.size].max_node_count)
 }
@@ -140,20 +140,20 @@ module "app_aks" {
   source     = "./modules/app_aks"
   depends_on = [module.app_lb]
 
-  cluster_subnet_id      = module.networking.private_subnet.id
-  etcd_key_vault_key_id  = module.vault.etcd_key_id
-  gateway                = module.app_lb.gateway
-  identity               = module.identity.identity
-  location               = azurerm_resource_group.default.location
-  namespace              = var.namespace
+  cluster_subnet_id       = module.networking.private_subnet.id
+  etcd_key_vault_key_id   = module.vault.etcd_key_id
+  gateway                 = module.app_lb.gateway
+  identity                = module.identity.identity
+  location                = azurerm_resource_group.default.location
+  namespace               = var.namespace
   node_pool_min_vm_per_az = local.kubernetes_min_node_per_az
   node_pool_max_vm_per_az = local.kubernetes_max_node_per_az
-  node_pool_vm_size      = local.kubernetes_instance_type
-  node_pool_zones        = local.node_pool_zones
-  public_subnet          = module.networking.public_subnet
-  resource_group         = azurerm_resource_group.default
-  sku_tier               = var.cluster_sku_tier
-  tags                   = var.tags
+  node_pool_vm_size       = local.kubernetes_instance_type
+  node_pool_zones         = local.node_pool_zones
+  public_subnet           = module.networking.public_subnet
+  resource_group          = azurerm_resource_group.default
+  sku_tier                = var.cluster_sku_tier
+  tags                    = var.tags
 }
 locals {
   service_account_name         = "wandb-app"
@@ -267,7 +267,7 @@ locals {
     path      = "${var.blob_container}/${var.bucket_path}"
     accessKey = var.storage_key
   }
-  bucket_config = var.external_bucket != null ? var.external_bucket : (local.use_customer_bucket ? local.default_bucket_config : null)
+  bucket_config                    = var.external_bucket != null ? var.external_bucket : (local.use_customer_bucket ? local.default_bucket_config : null)
   weave_trace_service_account_name = "wandb-weave-trace"
 }
 
@@ -291,12 +291,7 @@ module "wandb" {
         host          = local.url
         license       = var.license
         cloudProvider = "azure"
-        bucket = local.bucket_config == null ? {
-          provider  = "az"
-          name      = module.storage[0].account.name
-          path      = "${module.storage[0].container.name}/${var.bucket_path}"
-          accessKey = module.storage[0].account.primary_access_key
-        } : local.bucket_config
+        bucket        = local.bucket_config == null ? {} : local.bucket_config
         defaultBucket = {
           provider  = "az"
           name      = module.storage[0].account.name
@@ -342,7 +337,7 @@ module "wandb" {
         internalJWTMap = [
           {
             subject = "system:serviceaccount:default:${local.weave_trace_service_account_name}",
-            issuer = var.kubernetes_cluster_oidc_issuer_url
+            issuer  = var.kubernetes_cluster_oidc_issuer_url
           }
         ]
       }
