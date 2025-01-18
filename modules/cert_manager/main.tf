@@ -23,10 +23,9 @@ resource "helm_release" "cert_manager" {
 # solution.
 # https://stackoverflow.com/questions/69765121/how-to-avoid-clusterissuer-dependency-on-helm-cert-manager-crds-in-terraform-pla
 resource "helm_release" "cert_issuer" {
-  name       = "cert-issuer"
-  chart      = "cert-issuer"
-  repository = path.module
-  namespace  = local.default_namespace
+  name      = "cert-issuer"
+  chart     = "${path.module}/cert-issuer"
+  namespace = local.default_namespace
 
   set {
     name  = "fullnameOverride"
