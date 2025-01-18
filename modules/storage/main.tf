@@ -18,6 +18,9 @@ resource "azurerm_storage_account" "default" {
       exposed_headers    = ["*"]
       max_age_in_seconds = 3600
     }
+    delete_retention_policy {
+      days = 30
+    }
   }
 
   queue_properties {
