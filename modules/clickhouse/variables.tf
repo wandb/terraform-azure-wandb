@@ -29,7 +29,7 @@ variable "clickhouse_private_endpoint_service_name" {
   default     = ""
 
   validation {
-    condition = can(regex("\\.azure\\.privatelinkservice$", var.clickhouse_private_endpoint_service_name))
+    condition     = can(regex("\\.azure\\.privatelinkservice$", var.clickhouse_private_endpoint_service_name))
     error_message = "ClickHouse Service name must end in '.azure.privatelinkservice'."
   }
 }
@@ -40,7 +40,7 @@ variable "clickhouse_region" {
   default     = ""
 
   validation {
-    condition = length(var.clickhouse_region) > 0
+    condition     = length(var.clickhouse_region) > 0
     error_message = "Clickhouse Region should always be set if the private endpoint service name is specified."
   }
 }

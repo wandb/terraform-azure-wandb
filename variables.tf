@@ -35,50 +35,9 @@ variable "size" {
   type        = string
 }
 
-variable "wandb_version" {
-  description = "The version of Weights & Biases local to deploy."
-  type        = string
-  default     = "latest"
-}
-
-variable "wandb_image" {
-  description = "Docker repository of to pull the wandb image from."
-  type        = string
-  default     = "wandb/local"
-}
-
 variable "license" {
   type        = string
   description = "Your wandb/local license"
-}
-
-variable "oidc_issuer" {
-  type        = string
-  description = "A url to your Open ID Connect identity provider, i.e. https://cognito-idp.us-east-1.amazonaws.com/us-east-1_uiIFNdacd"
-  default     = ""
-}
-
-variable "oidc_client_id" {
-  type        = string
-  description = "The Client ID of application in your identity provider"
-  default     = ""
-}
-
-variable "oidc_secret" {
-  type        = string
-  description = "The Client secret of application in your identity provider"
-  default     = ""
-  sensitive   = true
-}
-
-variable "oidc_auth_method" {
-  type        = string
-  description = "OIDC auth method"
-  default     = "implicit"
-  validation {
-    condition     = contains(["pkce", "implicit"], var.oidc_auth_method)
-    error_message = "Invalid OIDC auth method."
-  }
 }
 
 variable "other_wandb_env" {
@@ -158,12 +117,6 @@ variable "database_sku_name" {
 ##########################################
 # Redis                                  #
 ##########################################
-variable "create_redis" {
-  type        = bool
-  description = "Boolean indicating whether to provision an redis instance (true) or not (false)."
-  default     = false
-}
-
 variable "redis_capacity" {
   type        = number
   description = "Number indicating size of an redis instance. Defaults to null and value from deployment-size.tf is used"
@@ -279,18 +232,6 @@ variable "allowed_ip_ranges" {
   description = "Allowed public IP addresses or CIDR ranges."
   type        = list(string)
   default     = []
-}
-
-variable "weave_wandb_env" {
-  type        = map(string)
-  description = "Extra environment variables for W&B"
-  default     = {}
-}
-
-variable "app_wandb_env" {
-  type        = map(string)
-  description = "Extra environment variables for W&B"
-  default     = {}
 }
 
 variable "parquet_wandb_env" {

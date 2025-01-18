@@ -3,10 +3,10 @@ locals {
 }
 
 resource "azurerm_private_endpoint" "clickhouse" {
-  name                = "${var.namespace}-clickhouse-pe"
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  subnet_id           = var.private_subnet_id
+  name                          = "${var.namespace}-clickhouse-pe"
+  location                      = var.location
+  resource_group_name           = var.resource_group_name
+  subnet_id                     = var.private_subnet_id
   custom_network_interface_name = "${var.namespace}-clickhouse-nic"
 
   private_service_connection {
